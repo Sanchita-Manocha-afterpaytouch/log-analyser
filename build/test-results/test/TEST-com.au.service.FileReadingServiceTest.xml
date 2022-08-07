@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.au.service.FileReadingServiceTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2022-08-07T09:02:56" hostname="smanocha-macbookpro.local" time="0.001">
+  <properties/>
+  <testcase name="should_throw_exception_when_file_not_found()" classname="com.au.service.FileReadingServiceTest" time="0.0"/>
+  <testcase name="should_return_log_list_from_file()" classname="com.au.service.FileReadingServiceTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

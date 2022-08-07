@@ -1,0 +1,60 @@
+apply plugin: 'java'
+
+sourceSets {
+    integrationTest{
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir file('src/integrationTest/java')
+        }
+        resources.srcDir file('src/integrationTest/resources')
+    }
+}
+
+configurations {
+    integrationTestRuntimeOnly.extendsFrom(testRuntimeOnly)
+    integrationTestImplementation.extendsFrom(testImplementation)
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
+}
+
+tasks.withType(Test) {
+    useJUnitPlatform()
+    testLogging {
+        events "PASSED", "SKIPPED", "FAILED"
+    }
+}
+
+task integrationTest(type: Test){
+
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
+    shouldRunAfter test
+}
+
+tasks.withType(ProcessResources){
+    duplicatesStrategy = DuplicatesStrategy.WARN
+}
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes "Main-Class": "com.au.main.LogAnalyserApp"
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    with jar
+}
+
+
+check.dependsOn integrationTest
+integrationTest.mustRunAfter test
+
